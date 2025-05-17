@@ -47,3 +47,8 @@ func IsSupported() bool {
 	b := C.gtk_session_lock_is_supported()
 	return gobool(b)
 }
+
+func GetProtocolVersion() uint {
+	v := C.gtk_session_lock_get_protocol_version()
+	return uint(v)
+}
