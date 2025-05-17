@@ -52,3 +52,9 @@ func GetProtocolVersion() uint {
 	v := C.gtk_session_lock_get_protocol_version()
 	return uint(v)
 }
+
+func IsLockWindow(window *gtk.Window) bool {
+	wp := nativeWindow(window)
+	b := C.gtk_session_lock_is_lock_window(wp)
+	return gobool(b)
+}
