@@ -9,6 +9,7 @@ import (
 	"unsafe"
 
 	"github.com/gotk3/gotk3/gdk"
+	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 )
 
@@ -57,4 +58,47 @@ func IsLockWindow(window *gtk.Window) bool {
 	wp := nativeWindow(window)
 	b := C.gtk_session_lock_is_lock_window(wp)
 	return gobool(b)
+}
+
+type Lock struct {
+	*glib.Object
+
+	ptr *C.GtkSessionLockLock
+}
+
+func PrepareLock() *Lock {
+	gp := C.gtk_session_lock_prepare_lock()
+	obj := &glib.Object{
+		GObject: glib.ToGObject(unsafe.Pointer(gp)),
+	}
+
+	return &Lock{
+		Object: obj,
+
+		ptr: gp,
+	}
+}
+
+func (l *Lock) Lock() {
+	C.gtk_session_lock_lock_lock(l.ptr)
+}
+
+func (l *Lock) Destroy() {
+	C.gtk_session_lock_lock_destroy(l.ptr)
+}
+
+func (l *Lock) UnlockAndDestroy() {
+	C.gtk_session_lock_lock_unlock_and_destroy(l.ptr)
+}
+
+func (l *Lock) NewSurface(window *gtk.Window, monitor *gdk.Monitor) {
+	wp := nativeWindow(window)
+	mp := nativeMonitor(monitor)
+
+	C.gtk_session_lock_lock_new_surface(l.ptr, wp, mp)
+}
+
+func UnmapLockWindow(window *gtk.Window) {
+	wp := nativeWindow(window)
+	C.gtk_session_lock_unmap_lock_window(wp)
 }
