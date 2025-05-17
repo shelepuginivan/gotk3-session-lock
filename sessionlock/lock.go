@@ -42,3 +42,8 @@ func GetMicroVersion() uint {
 	v := C.gtk_session_lock_get_micro_version()
 	return uint(v)
 }
+
+func IsSupported() bool {
+	b := C.gtk_session_lock_is_supported()
+	return gobool(b)
+}
