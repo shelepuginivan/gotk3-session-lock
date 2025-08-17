@@ -43,7 +43,7 @@ func GetMinorVersion() uint {
 	return uint(v)
 }
 
-// GetMinorVersion returns the micro/patch version number of the
+// GetMicroVersion returns the micro/patch version number of the
 // gtk-session-lock library.
 func GetMicroVersion() uint {
 	v := C.gtk_session_lock_get_micro_version()
